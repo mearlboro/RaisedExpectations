@@ -9,10 +9,11 @@
 - Final research topic: "The effect of postural stability on the relationship between eyebrow movement and pitch"
 - Re-discussed allocation of roles
 - Created github repository and organised folders
-- Extracted the eyebrow data for all target words for camera one from the open face folder and did preliminary analysis of eyebrow movement for 'birthday' target word for dyad 103_203
+- Extracted the eyebrow data for all target words for camera one from the open face folder
+- Conducted preliminary analysis of eyebrow movement for 'birthday' target word for dyad 103_203 
 
 ## Wednesday July 15
-- Started creating the preregistration document
+- Started drafting the preregistration document
 - Identified relevant literature
 - 
 
