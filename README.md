@@ -20,6 +20,11 @@ Data (from original dataset):
 
 - `data/audio`: raw audio of speakers (2 channel, both together in the same file)
 - `data/eyebrows`: OpenFace eyebrow and tip of nose position time series
+    - `data/eyebrows/motion`: the y-axis displacement betwene the centre of mass of the eyebrows and
+    the tip of the nose, similar to Gast (2023)
+    - `data/eyebrows/std`: the XY coordinates of the eyebrows relative to tip of the nose
+    - `data/eyebrows/motion`: the Y-axis displacement of the centre of mass of the eyebrows relative
+    to tip of the nose
 
 Data (to be produced by analysis):
 
@@ -44,9 +49,12 @@ Python packages are listed in `requirements.txt`, install with preferred tool.
 ### Eyebrows data analysis
 
 See `notebooks/eyebrows.ipynb` for how we subtract the position of the nose to obtain relative
-movement of the eyebrows (these are saved in CSV files with the extension `_std.csv`).
+movement of the eyebrows (these are saved in CSV files with the extension `_std.csv`), and for
+how we use the position of the nose and the centre of mass of the eyebrows to compute y-axis
+displacement of the eyebrows (these are saved in CSV files with the extension `_motion.csv`).
 
-On these 'standardised' files we can apply mutual information and obtain comparable values.
+On the 'standardised' files we can apply mutual information and obtain comparable values, on
+the 'motion' files we can apply pairwise measures to compare to pitch.
 
 ### Computing mutual information
 

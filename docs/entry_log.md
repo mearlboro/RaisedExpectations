@@ -12,12 +12,14 @@
 - Re-discussed allocation of roles
 - Created github repository and organised folders
 - Extracted the eyebrow data for all target words for camera one from the open face folder
+- Extracted eyebrow movement data relative to the tip of the nose
 - Conducted preliminary analysis of eyebrow movement for 'birthday' target word for dyad 103_203
 - Created readme.md
 
 ## Wednesday July 15
 - Started drafting the preregistration document
 - Identified relevant literature
-- 
+- Produced eyebrow motion/displacement preprocessed time series for the existing data
+- Computed pairwise mutual information between relative eyebrow positions of the guesser and clue-giver pairs
 
 ## Thursday July 16
