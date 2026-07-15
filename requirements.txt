@@ -1,0 +1,15 @@
+jpype1
+mypy
+matplotlib
+numpy
+scipy
+pandas
+seaborn
+audiofile
+librosa
+opensmile
+praat-parselmouth
+exploface
+spacy
+pycwt
+networkx

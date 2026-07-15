@@ -17,7 +17,10 @@ let
     setuptools
   ]);
 
-  sysPkgs = with pkgs; [ mypy ];
+  sysPkgs = with pkgs; [
+    jdk_headless
+    mypy
+  ];
 
   powerlaw = pkgs.fetchFromGitHub {
      owner = "schae234";
