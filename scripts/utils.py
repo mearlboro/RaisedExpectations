@@ -18,10 +18,10 @@ def construct_exp_df(data_files: List[str]):
 
     return pd.DataFrame(data, columns = [ 'Sub1', 'Sub2', 'word', 'board', 'role' ])
 
-def get_new_filename(data_file):
+def get_new_filename(data_file, ftype = 'std'):
     fdir = '/'.join(data_file.split('/')[:-1])
-    fdir += '/std/'
+    fdir += f"/{ftype}/"
     fnam = data_file.split('/')[-1]
-    fnam = fnam.split('.csv')[0] + '_std.csv'
+    fnam = fnam.split('.csv')[0] + f"_{ftype}.csv"
     return fdir + fnam
 
