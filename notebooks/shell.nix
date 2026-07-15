@@ -3,25 +3,28 @@
 let
 
   pyPkgs = pkgs.python312.withPackages (ps: with ps; [
+    pip
+    setuptools
+    mypy
     jupyter
     ipython
-
     matplotlib
-		jpype1
-    mypy
+    seaborn
     numpy
     scipy
 		pandas
-    seaborn
-    pip
-    setuptools
   ]);
 
   sysPkgs = with pkgs; [
-    jdk_headless
     mypy
   ];
 
+  pyspi = pkgs.fetchFromGitHub {
+     owner = "DynamicsAndNeuralSystems";
+     repo  = "pyspi";
+     rev   = "542defa907b8a27401bdeeb7a4b72dfde63d84ac";
+     hash  = "sha256-kttV1wMTA/CFjfkuK4dKNb+3325FhqlBOls7D3samYo=";
+  };
   powerlaw = pkgs.fetchFromGitHub {
      owner = "schae234";
      repo  = "powerlaw";
@@ -39,6 +42,6 @@ pkgs.mkShell {
     SOURCE_DATE_EPOCH=$(date +%s)
 
     # Add powerlaw to path
-    export PYTHONPATH=$PWD:${powerlaw}:$PYTHONPATH
+    export PYTHONPATH=$PWD:${powerlaw}:${pyspi}:$PYTHONPATH
     '';
 }
