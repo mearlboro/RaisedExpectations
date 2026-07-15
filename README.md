@@ -35,3 +35,32 @@ TODO (decide data to include or future steps):
 - diarization to know when they speak at once (to exclude from pitch extraction data)
 - familiarity between subjects - does it improve or reduce accuracy? does it affect facial
   expression variability or synchrony?
+
+
+## Setup
+
+Python packages are listed in `requirements.txt`, install with preferred tool.
+
+### Eyebrows data analysis
+
+See `notebooks/eyebrows.ipynb` for how we subtract the position of the nose to obtain relative
+movement of the eyebrows (these are saved in CSV files with the extension `_std.csv`).
+
+On these 'standardised' files we can apply mutual information and obtain comparable values.
+
+### Computing mutual information
+
+Mutual information is computed with `infodynamics.jar`, you need Java 8 Headless SDK to reproduce
+computations. Can use the `mishell.nix` Nix shell for a reproducible environment for Java + Python.
+This is Python 3.9 and Java 8, both quite old, but they do the job. The precomputed time series
+are also in `data/mutualinfo`. [Install Nix](https://nixos.org/download/) then run
+
+```
+nix-shell mishell.nix
+
+python -m scripts.mutualinfo
+```
+Currently jupyter does not work in this shell so everything is computed as a script.
+
+Joseph T. Lizier, "JIDT: An information-theoretic toolkit for studying the dynamics of complex
+systems", *Frontiers in Robotics and AI* 1:11, 2014; doi:[10.3389/frobt.2014.00011](http://dx.doi.org/10.3389/frobt.2014.00011) (pre-print: [arXiv:1408.3270](http://arxiv.org/abs/1408.3270))
