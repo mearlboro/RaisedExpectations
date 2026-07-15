@@ -2,7 +2,9 @@ import os
 import pandas as pd
 import numpy as np
 import jpype as jp
-import typing
+from typing import Tuple
+
+from scripts.utils import construct_exp_df
 
 INFODYNAMICS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'infodynamics.jar')
 
@@ -51,13 +53,17 @@ def javify(X: np.ndarray, dtype: jp.JClass) -> jp.JArray:
     return jX
 
 def jarray_from_csv(filename: str) -> np.ndarray:
+    """
+    Read the eyebrow CSV with heads x_17, y_17... x_27, y_27 for XY coordinates
+    of eyebrows. Extract all coordinates as numpy array.
+    """
     df = pd.read_csv(filename)
     X  = np.concatenate([ np.array(df[[f"x_{i}" for i in range(17, 27)]]),
                           np.array(df[[f"y_{i}" for i in range(17, 27)]]) ], axis = 1)
 
     return X
 
-def calc_multivar_mi(X: np.ndarray, Y: np.ndarray) -> float:
+def calc_multivar_mi(X: np.ndarray, Y: np.ndarray) -> Tuple[float, int]:
     """
     Compute mutlivariate mutual information from two time series with the same
     number of data points and variables
@@ -76,18 +82,31 @@ def calc_multivar_mi(X: np.ndarray, Y: np.ndarray) -> float:
     miCalc.setObservations(jX, jY)
     miCalc.finaliseAddObservations()
 
-    return miCalc.computeAverageLocalOfObservations()
+    return miCalc.computeAverageLocalOfObservations(), tlen
 
 if __name__ == "__main__":
 
-    data_files = [ f'data/eyebrows/{name}' for name in sorted(os.listdir('data/eyebrows')) if 'std' in name ]
+    data_files = [ f'data/eyebrows/std/{name}'
+                   for name in sorted(os.listdir('data/eyebrows/std'))
+                   if 'std' in name ]
     pairs = list(zip(data_files[::2], data_files[1::2]))
 
+
     jvm_start()
+
+    mis = []
+    tlens = []
 
     for xfile, yfile in pairs:
         jX = jarray_from_csv(xfile)
         jY = jarray_from_csv(yfile)
         mi = calc_multivar_mi(jX, jY,)
-        print(f"{mi}")
+        mis.append(mi[0])
+        tlens.append(mi[1])
 
+    df = construct_exp_df(data_files)
+    df = df.drop('role', axis=1).drop_duplicates()
+    df['eyebrow_MMI'] = mis
+    df['tlen']        = tlens
+
+    df.to_csv('data/mutualinfo/eyebrow_multivar_mutual_info.csv')
