@@ -19,7 +19,7 @@ Hypotheses:
 Data (from original dataset):
 
 - `data/audio`: raw audio of speakers (2 channel, both together in the same file)
-- `data/eyebrows`: OpenFace eyebrow and tip of nose position time series
+- `data/eyebrows`: OpenFace eyebrow and tip of nose position time series - 30fps (30Hz)
     - `data/eyebrows/motion`: the y-axis displacement betwene the centre of mass of the eyebrows and
     the tip of the nose, similar to Gast (2023)
     - `data/eyebrows/std`: the XY coordinates of the eyebrows relative to tip of the nose
@@ -28,7 +28,7 @@ Data (from original dataset):
 
 Data (to be produced by analysis):
 
-- f0 pitch for each speaker
+- f0 pitch for each speaker - 500Hz
 - mean, variability and entropy of eyebrow motions for each person (total and windowed)
 - mutlivariate mutual information between eyebrow positions of the clue-giver and guesser (total and
   windowed)
@@ -58,7 +58,8 @@ the 'motion' files we can apply pairwise measures to compare to pitch.
 
 ### Computing mutual information
 
-Mutual information is computed with `infodynamics.jar`, you need Java 8 Headless SDK to reproduce
+Mutual information is computed with `infodynamics.jar`, a pre-compiled bundle of the
+[Java Information Dynamics Toolkit (JIDT)](https://github.com/jlizier/jidt), you need Java 8 Headless SDK to reproduce
 computations. Can use the `mishell.nix` Nix shell for a reproducible environment for Java + Python.
 This is Python 3.9 and Java 8, both quite old, but they do the job. The precomputed time series
 are also in `data/mutualinfo`. [Install Nix](https://nixos.org/download/) then run
