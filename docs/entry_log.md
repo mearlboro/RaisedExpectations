@@ -23,3 +23,6 @@
 - Computed pairwise mutual information between relative eyebrow positions of the guesser and clue-giver pairs
 
 ## Thursday July 16
+- Discussed potential avenues for analysis
+- Started working on slides for presentation on Friday 17 July
+- Further drafting of preregistration document
