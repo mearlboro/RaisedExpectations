@@ -13,9 +13,13 @@ let
     numpy
     scipy
 		pandas
+    jpype1
+    scikit-learn
+    colorama
   ]);
 
   sysPkgs = with pkgs; [
+    jdk_headless
     mypy
   ];
 
