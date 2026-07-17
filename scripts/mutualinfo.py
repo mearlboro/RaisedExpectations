@@ -151,14 +151,14 @@ def calc_brow2pitch_timedelay() -> None:
 
     results = []
     for df, cond in zip([ground, board], ['ground', 'board']):
-        for dt in range(10):
+        for dt in range(0, 100):
             mi = calc_multivar_mi(
                     np.array(df['pitch'][:1800]),
                     np.array(df['eyebrows_interp'][dt: 1800 + dt]))[0]
 
             results.append((dt, cond, mi))
-    df = pd.DataFrame(results, columns = [ 'dt', 'condition', 'TDMI' ]).reset_index()
-    df.to_csv('data/mutualinfo/eyebrow_pitch_univar_tdmi.csv')
+    df = pd.DataFrame(results, columns = [ 'dt', 'condition', 'TDMI' ]).reset_index(drop = True)
+    df.to_csv('data/mutualinfo/eyebrow_pitch_univar_tdmi.csv', index = False)
 
 
 if __name__ == "__main__":
