@@ -20,7 +20,4 @@ mach-nix.nixpkgs.mkShell {
     mach-nix.nixpkgs.mypy
     mach-nix.nixpkgs.jdk8_headless
   ];
-  shellHook = ''
-    python -m scripts.mutualinfo
-  '';
 }

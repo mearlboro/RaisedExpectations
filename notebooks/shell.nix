@@ -13,9 +13,14 @@ let
     numpy
     scipy
 		pandas
+
+    torch
     jpype1
+    tqdm
     scikit-learn
     colorama
+    numba
+    h5py
   ]);
 
   sysPkgs = with pkgs; [
@@ -35,6 +40,12 @@ let
      rev   = "f95e8057128f132be6ee8ac5ed5c419a6ead97f1";
      hash  = "sha256-m2psea9y4zmk2P1/skBPTMrCsV7UFC0Ew85ikDz4SK8=";
   };
+  tslearn = pkgs.fetchFromGitHub {
+     owner = "tslearn-team";
+     repo  = "tslearn";
+     rev   = "f8f13ddf4186e2cc99c8ef495aeb46b1254a01f7";
+     hash  = "sha256-BsPFbjgsQjg9mTI3+wW5Q83PoFaculjts/QlmD5xeZ8=";
+  };
 
 in
 
@@ -46,6 +57,6 @@ pkgs.mkShell {
     SOURCE_DATE_EPOCH=$(date +%s)
 
     # Add powerlaw to path
-    export PYTHONPATH=$PWD:${powerlaw}:${pyspi}:$PYTHONPATH
+    export PYTHONPATH=$PWD:${powerlaw}:${tslearn}:${pyspi}:$PYTHONPATH
     '';
 }

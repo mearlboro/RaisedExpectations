@@ -4,7 +4,7 @@ import numpy as np
 import jpype as jp
 from typing import Tuple
 
-from scripts.utils import construct_exp_df
+from scripts.utils import construct_exp_df, std
 
 INFODYNAMICS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'infodynamics.jar')
 
@@ -52,7 +52,7 @@ def javify(X: np.ndarray, dtype: jp.JClass) -> jp.JArray:
 
     return jX
 
-def jarray_from_csv(filename: str) -> np.ndarray:
+def array_from_csv(filename: str) -> np.ndarray:
     """
     Read the eyebrow CSV with heads x_17, y_17... x_27, y_27 for XY coordinates
     of eyebrows. Extract all coordinates as numpy array.
@@ -63,7 +63,7 @@ def jarray_from_csv(filename: str) -> np.ndarray:
 
     return X
 
-def calc_multivar_mi(X: np.ndarray, Y: np.ndarray) -> Tuple[float, int]:
+def calc_multivar_mi(X: np.ndarray, Y: np.ndarray, est: str = 'Kraskov') -> Tuple[float, int]:
     """
     Compute mutlivariate mutual information from two time series with the same
     number of data points and variables
@@ -72,8 +72,15 @@ def calc_multivar_mi(X: np.ndarray, Y: np.ndarray) -> Tuple[float, int]:
     X = X[:tlen]
     Y = Y[:tlen]
 
-    miCalc = jp.JClass('infodynamics.measures.continuous.gaussian.MutualInfoCalculatorMultiVariateGaussian')()
-    miCalc.initialise(X.shape[1], Y.shape[1])
+    if est == 'Gaussian':
+        miCalc = jp.JClass('infodynamics.measures.continuous.gaussian.MutualInfoCalculatorMultiVariateGaussian')()
+    elif est == 'Kraskov':
+        miCalc = jp.JClass('infodynamics.measures.continuous.kraskov.MutualInfoCalculatorMultiVariateKraskov1')()
+
+    if len(X.shape) > 1:
+        miCalc.initialise(X.shape[1], Y.shape[1])
+    else:
+        miCalc.initialise(1, 1)
     miCalc.startAddObservations()
 
     jX = javify(X, jp.JDouble)
@@ -84,8 +91,8 @@ def calc_multivar_mi(X: np.ndarray, Y: np.ndarray) -> Tuple[float, int]:
 
     return miCalc.computeAverageLocalOfObservations(), tlen
 
-if __name__ == "__main__":
 
+def calc_brow2brow_multivariate() -> None:
     data_files = [ f'data/eyebrows/std/{name}'
                    for name in sorted(os.listdir('data/eyebrows/std'))
                    if 'std' in name ]
@@ -98,9 +105,9 @@ if __name__ == "__main__":
     tlens = []
 
     for xfile, yfile in pairs:
-        jX = jarray_from_csv(xfile)
-        jY = jarray_from_csv(yfile)
-        mi = calc_multivar_mi(jX, jY,)
+        X = array_from_csv(xfile)
+        Y = array_from_csv(yfile)
+        mi = calc_multivar_mi(X, Y,)
         mis.append(mi[0])
         tlens.append(mi[1])
 
@@ -110,3 +117,50 @@ if __name__ == "__main__":
     df['tlen']        = tlens
 
     df.to_csv('data/mutualinfo/eyebrow_multivar_mutual_info.csv')
+
+
+def calc_brow2pitch_univariate() -> None:
+
+    ground = pd.read_csv('example/merged/103_203.csv')
+    ground = std(ground, 'pitch')
+    board  = pd.read_csv('example/merged/108_208.csv')
+    board  = std(board, 'pitch')
+    ground = ground.dropna()
+    board  = board.dropna()
+
+    jvm_start()
+
+    # TODO: change hardcoded time duration and file names
+    for df in [ground, board]:
+        print(calc_multivar_mi(
+                np.array(df['eyebrows_interp'][:1800]),
+                np.array(df['pitch'][:1800])))
+
+
+def calc_brow2pitch_timedelay() -> None:
+
+    # TODO: change hardcoded time duration and file names
+    ground = pd.read_csv('example/merged/103_203.csv')
+    ground = std(ground, 'pitch')
+    board  = pd.read_csv('example/merged/108_208.csv')
+    board  = std(board, 'pitch')
+    ground = ground.dropna()
+    board  = board.dropna()
+
+    jvm_start()
+
+    results = []
+    for df, cond in zip([ground, board], ['ground', 'board']):
+        for dt in range(10):
+            mi = calc_multivar_mi(
+                    np.array(df['pitch'][:1800]),
+                    np.array(df['eyebrows_interp'][dt: 1800 + dt]))[0]
+
+            results.append((dt, cond, mi))
+    df = pd.DataFrame(results, columns = [ 'dt', 'condition', 'TDMI' ]).reset_index()
+    df.to_csv('data/mutualinfo/eyebrow_pitch_univar_tdmi.csv')
+
+
+if __name__ == "__main__":
+    calc_brow2pitch_univariate()
+    calc_brow2pitch_timedelay()

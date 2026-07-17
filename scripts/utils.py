@@ -12,6 +12,7 @@ def get_exp_detail_from_file(data_file: str) -> List[str]:
     return [ *pair, word, cond, who ]
 
 def construct_exp_df(data_files: List[str]):
+
     data = []
     for data_file in data_files:
        data.append(get_exp_detail_from_file(data_file))
@@ -19,9 +20,17 @@ def construct_exp_df(data_files: List[str]):
     return pd.DataFrame(data, columns = [ 'Sub1', 'Sub2', 'word', 'board', 'role' ])
 
 def get_new_filename(data_file, ftype = 'std'):
+
     fdir = '/'.join(data_file.split('/')[:-1])
     fdir += f"/{ftype}/"
     fnam = data_file.split('/')[-1]
     fnam = fnam.split('.csv')[0] + f"_{ftype}.csv"
     return fdir + fnam
+
+
+def std(df, label):
+    m = np.mean(df[label])
+    s = np.std(df[label], ddof = 1)
+    df[label] = (df[label] - m)/s
+    return df
 
