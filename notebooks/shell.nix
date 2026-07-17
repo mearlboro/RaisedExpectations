@@ -14,8 +14,10 @@ let
     scipy
 		pandas
 
-    torch
     jpype1
+    torch
+    hyppo
+    statsmodels
     tqdm
     scikit-learn
     colorama
