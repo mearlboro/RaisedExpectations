@@ -113,16 +113,16 @@ crqa_ground = crqa(ts1 = ground$pitch_z, ts2 = ground$eyebrows_interp,
                    delay = delay, embed = embedding, radius = radius, rescale = 0,
                    normalize = 0, tw = 0, side = "both", method = "crqa",
                    metric = "euclidean", datatype = "continuous")
-plot_rp(crqa_ground$RP, title = "Clue-giver standing on the ground", xlabel = "Pitch (f0)",
-        ylabel = "Eyebrows")
+plot_rp(crqa_ground$RP, title = "Clue-giver standing on the ground",
+        xlabel = "Time indices pitch (ms)", ylabel = "Time indices eyebrows (ms)")
 
 
 crqa_wobble = crqa(ts1 = wobble$eyebrows_interp, ts2 = wobble$pitch_z,
                    delay = delay, embed = embedding, radius = radius, rescale = 0,
                    normalize = 0, tw = 0, side = "both", method = "crqa",
                    metric = "euclidean", datatype = "continuous")
-plot_rp(crqa_wobble$RP, title = "Clue-giver standing on the wobble board", xlabel = "Pitch (f0)",
-        ylabel = "Eyebrows")
+plot_rp(crqa_wobble$RP, title = "Clue-giver standing on the wobble board",
+        xlabel = "Time indices pitch (ms)", ylabel = "Time indices eyebrows (ms)")
 
 results = data.frame(condition = c("ground", "wobble_board"),
                      RR = c(crqa_ground$RR, crqa_wobble$RR),
@@ -134,3 +134,25 @@ results = data.frame(condition = c("ground", "wobble_board"),
 
 # saving results
 write.csv(results, "docs/CRQA_pitch_eyebrows.csv", row.names = FALSE)
+
+
+### Diagonal cross-recurrence profiles
+
+dcrp_ground = drpfromts(ts1 = ground$pitch_z, ts2 = ground$eyebrows_interp, windowsize = 300 ,
+                       delay = delay, embed = embedding, radius = radius, rescale = 0,
+                       normalize = 0, tw = 0, side = "both", method = "crqa",
+                       metric = "euclidean", datatype = "continuous")
+plot(seq((length(dcrp_ground$profile)-1)*-0.5,(length(dcrp_ground$profile)-1)*0.5,1),
+     dcrp_ground$profile, type = "l", lwd = 2, xlab = "Time Lag (ms)",
+     ylab = "Cross-Recurrence Eyebrows-Pitch",
+     main = "Clue-giver standing on the ground", ylim = c(0, 0.23))
+
+
+dcrp_wobble = drpfromts(ts1 = wobble$pitch_z, ts2 = wobble$eyebrows_interp, windowsize = 300 ,
+                       delay = delay, embed = embedding, radius = radius, rescale = 0,
+                       normalize = 0, tw = 0, side = "both", method = "crqa",
+                       metric = "euclidean", datatype = "continuous")
+plot(seq((length(dcrp_wobble$profile)-1)*-0.5,(length(dcrp_wobble$profile)-1)*0.5,1),
+     dcrp_wobble$profile, type = "l", lwd = 2, xlab = "Time Lag (ms)",
+     ylab = "Cross-Recurrence Eyebrows-Pitch",
+     main = "Clue-giver standing on the wobble board", ylim = c(0, 0.23))
