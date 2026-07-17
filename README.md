@@ -9,7 +9,7 @@ on the ground. The two can talk to each-other until the word is guessed in up
 to 3 attempts.
 
 Hypotheses:
-- Raised eyebrows are associated with higher pitch in both the clue-giver when they are standing on the ground.
+- Raised eyebrows are associated with higher pitch in the clue-giver when they are standing on the ground.
 - Under increased postural stability demands (the clue-giver is standing on the wobble board), the co-variation between eyebrow movement and pitch dynamics is distorted.
 - Higher mutual information in eyebrow movements between the clue giver and the guesser is associated with faster guessing times (higher task performance).
 
