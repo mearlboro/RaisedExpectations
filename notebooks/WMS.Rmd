@@ -61,13 +61,15 @@ wms_ground <- win_ms_synch(pitch_ground, eye_ground,
 ```
 
 ```{r}
-plot_wms(wms_ground,
+p_ground <- plot_wms(wms_ground,
          show_arrows  = TRUE,
          arrow_n_time = 20,
          arrow_n_freq = 10,
          arrow_scale  = 0.35,
          arrow_min_si = 0.5,
          title_str    = "WMS — Ground")
+p_ground
+#ggsave("../figures/wms_ground.png", plot = p_ground, width = 8, height = 6, dpi = 300)
 ```
 WMS Board
 
@@ -84,11 +86,13 @@ wms_board <- win_ms_synch(pitch_board, eye_board,
 ```
 
 ```{r}
-plot_wms(wms_board,
+p_board <- plot_wms(wms_board,
          show_arrows  = TRUE,
          arrow_n_time = 20,
          arrow_n_freq = 10,
          arrow_scale  = 0.35,
          arrow_min_si = 0.5,
          title_str    = "WMS — Board")
+p_board
+#ggsave("../figures/wms_board.png", plot = p_board, width = 8, height = 6, dpi = 300)
 ```
